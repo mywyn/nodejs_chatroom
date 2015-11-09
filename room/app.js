@@ -79,8 +79,6 @@ io.on('connection', function(socket){
         socket.room = data.room_name;
         //socket.broadcast.emit('msg', '* 채널:'+socket.room+' - '+socket.userid + '님이 접속하셨습니다.');
         //socket.emit('msg', '* 채널:'+socket.room+' - '+socket.userid + '님이 접속하셨습니다.');
-
-        //io.sockets.in(room).emit('msg', '* 채널:'+socket.room+' - '+socket.userid + '님이 접속하셨습니다.');
         io.to(socket.room).emit('msg', '* 채널:'+socket.room+' - '+socket.userid + '님이 접속하셨습니다.');
 
     });
@@ -89,7 +87,6 @@ io.on('connection', function(socket){
        console.log(' - '+socket.userid+' : ' + data.msg);
         //socket.broadcast.emit('msg', '['+socket.userid+']'+data.msg);
         //socket.emit('msg', '[나]'+data.msg);
-        //io.sockets.in(room).emit('msg', '['+socket.userid+']'+data.msg);
         io.to(socket.room).emit('msg', '['+socket.userid+']'+data.msg);
     });
 });
