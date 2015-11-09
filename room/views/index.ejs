@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= title %></h1>
+    
+    <div id="log">
+        <span>아이디 : <input type="text" id="userid" value="임지현"></span>
+        <span>채널 : <input type="text" id="room_name" value="0215"></span>
+        <span><input type="button" id="enter" value="입장"></span>
+    </div>
+    
+    <div id="msgbox" style="display:none;background-color:lightblue; height:200px;">
+        <input type="text" id="msg"/><span id="channel">ㅇ</span></br>
+        <ul id = "messages"></span>
+    </div>
+          
+      
+    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+        $(document).ready(function(){
+            var socket = io();
+            $('#enter').click(function(){
+                var userid = $('#userid').val();
+                var room_name = $('#room_name').val();
+                
+                socket.emit('join', {'userid':userid, 'room_name':room_name});
+                
+                document.getElementById('log').style.display = 'none';
+                document.getElementById('msgbox').style.display = 'block';
+                $('#msg').keyup(function(event){
+                    if(event.which == 13){
+                        socket.emit('msg', {msg:$('#msg').val()});
+                        $('#msg').val('');
+                    }
+                });
+            });
+            
+            var boxdiv = document.getElementById('msgbox');
+
+            socket.on('msg', function(msg){
+                $('#messages').append($('<li>').text(msg));
+                boxdiv.scrollTop = boxdiv.scrollHeight;
+            });    
+        });
+        
+    </script>
+  </body>
+</html>
